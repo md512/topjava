@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.dao.MapMealStorage;
+import ru.javawebinar.topjava.dao.MealStorage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,11 +13,13 @@ import java.io.IOException;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
+
     private static final Logger log = getLogger(MealServlet.class);
+    private final MealStorage storage = new MapMealStorage();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("redirect to meals");
+        response.setCharacterEncoding("UTF-8");
 
         response.sendRedirect("meals.jsp");
     }

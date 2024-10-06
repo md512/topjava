@@ -1,0 +1,18 @@
+package ru.javawebinar.topjava.dao;
+
+import ru.javawebinar.topjava.model.Meal;
+
+import java.util.List;
+
+public interface MealStorage {
+
+    void save(Meal meal);
+
+    void update(Integer id, Meal meal);
+
+    void delete(Integer id);
+
+    Meal get(Integer id);
+
+    List<Meal> getAll();
+}
