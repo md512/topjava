@@ -27,12 +27,16 @@ public class MapMealStorage implements MealStorage {
 
     @Override
     public void save(Meal meal) {
-        storage.put(getNewId(), new Meal(counter.get(), meal.getDateTime(), meal.getDescription(), meal.getCalories()));
+        if (!isExist(meal.getId())) {
+            meal.setId(getNewId());
+            storage.put(counter.get(), meal);
+        }
     }
 
     @Override
     public void update(Integer id, Meal meal) {
-        if (storage.get(id) != null) {
+        if (isExist(id)) {
+            meal.setId(id);
             storage.put(id, meal);
         }
     }
@@ -54,5 +58,9 @@ public class MapMealStorage implements MealStorage {
 
     private int getNewId() {
         return counter.incrementAndGet();
+    }
+
+    private boolean isExist(Integer id) {
+        return get(id) != null;
     }
 }
