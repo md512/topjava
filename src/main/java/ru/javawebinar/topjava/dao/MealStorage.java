@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface MealStorage {
 
-    void save(Meal meal);
+    Meal create(Meal meal);
 
-    void update(Integer id, Meal meal);
+    Meal update(Meal meal);
 
-    void delete(Integer id);
+    void delete(int id);
 
-    Meal get(Integer id);
+    Meal get(int id);
 
     List<Meal> getAll();
 }

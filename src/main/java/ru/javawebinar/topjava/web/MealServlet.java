@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.dao.MapMealStorage;
+import ru.javawebinar.topjava.dao.InMemoryMealStorage;
 import ru.javawebinar.topjava.dao.MealStorage;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -20,7 +20,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
 
     private static final Logger log = getLogger(MealServlet.class);
-    private final MealStorage storage = new MapMealStorage();
+    private final MealStorage storage = new InMemoryMealStorage();
     private static final int CALORIES_PER_DAY = 2000;
 
     @Override
@@ -32,7 +32,7 @@ public class MealServlet extends HttpServlet {
         if (action == null) {
             request.setAttribute("storage", MealsUtil.filteredByStreams(storage.getAll(),
                     LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
-            request.getRequestDispatcher("/WEB-INF/jsp/meals.jsp").forward(request, response);
+            request.getRequestDispatcher("meals.jsp").forward(request, response);
             return;
         }
         Meal meal;
@@ -51,7 +51,7 @@ public class MealServlet extends HttpServlet {
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }
         request.setAttribute("meal", meal);
-        request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
+        request.getRequestDispatcher("editMeal.jsp").forward(request, response);
     }
 
     @Override
@@ -63,9 +63,9 @@ public class MealServlet extends HttpServlet {
         int calories = Integer.parseInt(request.getParameter("calories"));
 
         if (id == 0) {
-            storage.save(new Meal(id, dateTime, description, calories));
+            storage.create(new Meal(id, dateTime, description, calories));
         } else {
-            storage.update(id, new Meal(id, dateTime, description, calories));
+            storage.update(new Meal(id, dateTime, description, calories));
         }
         response.sendRedirect("meals");
     }
