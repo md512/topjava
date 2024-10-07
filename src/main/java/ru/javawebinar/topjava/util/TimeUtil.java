@@ -6,13 +6,18 @@ import java.time.format.DateTimeFormatter;
 
 public class TimeUtil {
 
-    private static final DateTimeFormatter mealsDateTimeFormater = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DEAULT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     public static boolean isBetweenHalfOpen(LocalTime lt, LocalTime startTime, LocalTime endTime) {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) < 0;
     }
 
     public static String format(LocalDateTime dateTime) {
-        return mealsDateTimeFormater.format(dateTime);
+        return FORMATTER.format(dateTime);
+    }
+
+    public static LocalDateTime parse(String dateTime) {
+        return LocalDateTime.parse(dateTime, DEAULT_FORMATTER);
     }
 }
