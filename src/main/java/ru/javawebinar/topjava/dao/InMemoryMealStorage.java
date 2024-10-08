@@ -36,8 +36,7 @@ public class InMemoryMealStorage implements MealStorage {
 
     @Override
     public Meal update(Meal meal) {
-        storage.replace(meal.getId(), meal);
-        return get(meal.getId());
+        return storage.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
