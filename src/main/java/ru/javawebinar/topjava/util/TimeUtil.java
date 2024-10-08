@@ -12,7 +12,7 @@ public class TimeUtil {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) < 0;
     }
 
-    public static String format(LocalDateTime dateTime) {
+    public static String formatWithoutT(LocalDateTime dateTime) {
         return FORMATTER.format(dateTime);
     }
 

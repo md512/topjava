@@ -1,15 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ru">
 
 <head>
     <title>Meal</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 <h3><a href="${pageContext.request.contextPath}/index.html">Home</a></h3>
 <hr>
-<h2>Edit meal</h2>
+
+<c:choose>
+    <c:when test="${param.action=='add'}">
+        <h2>Add meal</h2>
+    </c:when>
+    <c:when test="${param.action=='update'}">
+        <h2>Edit meal</h2>
+    </c:when>
+</c:choose>
+
 <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
 <form method="post" action="meals">
     <input type="hidden" name="id" value="${meal.id}"/>
@@ -27,7 +37,7 @@
     </dl>
     <br>
     <button type="submit">Save</button>
-    <button onclick="window.history.back()">Cancel</button>
+    <button type="button" onclick="window.history.back()">Cancel</button>
 </form>
 </body>
 </html>
