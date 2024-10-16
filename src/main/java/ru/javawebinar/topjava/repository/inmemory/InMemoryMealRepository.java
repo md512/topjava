@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
@@ -25,7 +25,7 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> save(meal, SecurityUtil.authUserId()));
+        MealsUtil.meals.forEach(meal -> save(meal, 1));
         save(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Еда второго пользователя", 500), 2);
     }
 
@@ -73,20 +73,22 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         log.info("get all for userId {}", userId);
-        return repository.values()
-                .stream()
-                .filter(meal -> meal.getUserId() == userId)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+        return getFiltered(userId, meal -> true);
     }
 
     @Override
     public List<Meal> getFilteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
         log.info("get all filtered by date for userId {}", userId);
+        return getFiltered(userId, meal -> meal.getDate().isAfter(startDate.minusDays(1)) &&
+                meal.getDate().isBefore(endDate.plusDays(1)));
+    }
+
+    private List<Meal> getFiltered(int userId, Predicate<Meal> filter) {
+        log.info("get all for userId {}", userId);
         return repository.values()
                 .stream()
                 .filter(meal -> meal.getUserId() == userId)
-                .filter(meal -> meal.getDate().isAfter(startDate) && meal.getDate().isBefore(endDate))
+                .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
