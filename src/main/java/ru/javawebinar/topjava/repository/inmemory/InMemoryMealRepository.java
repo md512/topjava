@@ -40,6 +40,7 @@ public class InMemoryMealRepository implements MealRepository {
         } else if (get(meal.getId(), userId) != null) {
             // handle case: update, but not present in storage
             log.info("update meal id {} for userId {}", meal.getId(), userId);
+            meal.setUserId(userId);
             return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
         } else {
             return null;
@@ -79,12 +80,11 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getFilteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
         log.info("get all filtered by date for userId {}", userId);
-        return getFiltered(userId, meal -> meal.getDate().isAfter(startDate.minusDays(1)) &&
-                meal.getDate().isBefore(endDate.plusDays(1)));
+        return getFiltered(userId, meal -> !meal.getDate().isBefore(startDate) &&
+                !meal.getDate().isAfter(endDate));
     }
 
     private List<Meal> getFiltered(int userId, Predicate<Meal> filter) {
-        log.info("get all for userId {}", userId);
         return repository.values()
                 .stream()
                 .filter(meal -> meal.getUserId() == userId)
