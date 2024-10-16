@@ -58,6 +58,6 @@ public class InMemoryUserRepository implements UserRepository {
                 .stream()
                 .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 }
