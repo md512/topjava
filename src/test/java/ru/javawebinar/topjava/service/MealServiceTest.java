@@ -30,7 +30,7 @@ import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class MealServiceTest extends TestCase {
+public class MealServiceTest {
 
     static {
         // Only for postgres driver logging
@@ -49,7 +49,7 @@ public class MealServiceTest extends TestCase {
 
     @Test
     public void getNotFound() {
-        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND_MEAL, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND_MEAL_ID, USER_ID));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class MealServiceTest extends TestCase {
 
     @Test
     public void deleteNotFound() {
-        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_MEAL, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_MEAL_ID, USER_ID));
     }
 
     @Test
@@ -108,6 +108,7 @@ public class MealServiceTest extends TestCase {
         Meal created = service.create(getNew(), USER_ID);
         Meal newMeal = getNew();
         newMeal.setId(created.getId());
+        assertMatch(created, newMeal);
         assertMatch(service.get(created.getId(), USER_ID), newMeal);
     }
 
