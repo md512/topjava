@@ -1,8 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -24,14 +23,17 @@ public class Meal extends AbstractBaseEntity {
     public static final String GET_BETWEEN = "Meal.getBetweenHalfOpen";
 
     @Column(name = "date_time", nullable = false)
-    @NotNull
+    @NotBlank(message = "[Дата/Время] не должно быть пустым")
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotBlank
+    @NotBlank(message = "[Описание] не должно быть пустым")
+    @Size(min = 2, max = 120, message = "Размер [Описание] должен быть между 2 и 120")
     private String description;
 
     @Column(name = "calories", nullable = false)
+    @Min(value = 10, message = "[Калории] должно быть между 10 и 5 000")
+    @Max(value = 5000, message = "[Калории] должно быть между 10 и 5 000")
     private int calories;
 
     @JoinColumn(name="user_id", nullable = false)
