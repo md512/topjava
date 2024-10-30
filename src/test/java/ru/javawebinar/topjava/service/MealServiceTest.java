@@ -19,6 +19,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
@@ -35,21 +37,21 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
-    private static long testTimeSum = 0;
+    private static final Map<String, Long> testTimeMap = new HashMap<>();
 
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
             long milliseconds = TimeUnit.NANOSECONDS.toMillis(nanos);
-            testTimeSum += milliseconds;
+            testTimeMap.put(description.getDisplayName(), milliseconds);
             log.info("Test '{}' executed in {} ms", description.getDisplayName(), milliseconds);
         }
     };
 
     @AfterClass
     public static void timeCount() {
-        log.info("MealServiceTest executed in {} ms", testTimeSum);
+        testTimeMap.forEach((method, timing) -> log.info("{} - {} ms", method, timing));
     }
 
     @Autowired
