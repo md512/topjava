@@ -23,7 +23,7 @@ public class Meal extends AbstractBaseEntity {
     public static final String GET_BETWEEN = "Meal.getBetweenHalfOpen";
 
     @Column(name = "date_time", nullable = false)
-    @NotBlank(message = "[Дата/Время] не должно быть пустым")
+    @NotNull(message = "[Дата/Время] не должно быть пустым")
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
