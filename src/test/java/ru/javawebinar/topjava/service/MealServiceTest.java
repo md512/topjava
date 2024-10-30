@@ -50,8 +50,12 @@ public class MealServiceTest {
     };
 
     @AfterClass
-    public static void timeCount() {
-        testTimeMap.forEach((method, timing) -> log.info("{} - {} ms", method, timing));
+    public static void timeResult() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n---- Timing of all tests ----\n");
+        testTimeMap.forEach((method, timing) -> sb.append(method).append(" - ").append(timing).append(" ms\n"));
+        sb.append("-----------------------------");
+        log.info(sb.toString() );
     }
 
     @Autowired
