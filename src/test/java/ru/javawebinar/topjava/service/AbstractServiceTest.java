@@ -29,7 +29,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
 public abstract class AbstractServiceTest {
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;
@@ -48,7 +48,7 @@ public abstract class AbstractServiceTest {
         });
     }
 
-    protected boolean isJpaProfile () {
+    protected boolean isJpaProfile() {
         return env.acceptsProfiles(org.springframework.core.env.Profiles.of(Profiles.JPA, Profiles.DATAJPA));
     }
 }
