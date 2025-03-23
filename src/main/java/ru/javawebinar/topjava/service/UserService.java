@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class UserService {
@@ -22,11 +23,11 @@ public class UserService {
     }
 
     public void delete(int id) {
-        checkNotFound(repository.delete(id), id);
+        checkNotFoundWithId(repository.delete(id), id);
     }
 
     public User get(int id) {
-        return checkNotFound(repository.get(id), id);
+        return checkNotFoundWithId(repository.get(id), id);
     }
 
     public User getByEmail(String email) {
@@ -38,6 +39,6 @@ public class UserService {
     }
 
     public void update(User user) {
-        checkNotFound(repository.save(user), user.getId());
+        checkNotFoundWithId(repository.save(user), user.getId());
     }
 }
